@@ -9,6 +9,8 @@ fab.env.roledefs = {
 
 @roles('web')
 def deploy():
+    # Get the sudo password immediately
+    fab.sudo('true')
     fab.local("rm dist/*")
     fab.local("npm run build-prod")
     fab.put("dist/*", "/usr/share/nginx/dice/", use_sudo=True)

@@ -2,9 +2,9 @@
  * @format
  */
 "use strict";
+import DiceTable from "./DiceTable";
 import React from "react";
 import { render } from "react-dom";
-import Die from "./die";
 
 import "./css/index.css";
 
@@ -16,19 +16,19 @@ function randint(low, high = null) {
   return Math.floor(Math.random() * (high + 1 - low)) + low;
 }
 
-function DiceTable({ rollID, values }) {
-  return (
-    <div className="dice">
-      {values.map((value, idx) =>
-        <Die
-          key={idx}
-          rollID={rollID}
-          rollOffset={0.05 * (values.length - idx)}
-          value={value}
-        />
-      )}
-    </div>
-  );
+let DIE_UID = 0;
+function makeDie(value = null) {
+  return {
+    uid: DIE_UID++,
+    value: value
+  };
+}
+
+function roll(die) {
+  return {
+    uid: die.uid,
+    value: randint(1, 6)
+  };
 }
 
 class App extends React.Component {
@@ -36,38 +36,49 @@ class App extends React.Component {
     maxDice: 8,
     minDice: 1
   };
+
   state = {
-    dice: [null],
+    dice: [makeDie()],
     rollID: 0
   };
+
   _rollDice = () => {
     this.setState({
-      dice: this.state.dice.map(() => randint(1, 6)),
+      dice: this.state.dice.map(die => roll(die)),
       rollID: this.state.rollID + 1
     });
   };
+
   _addDie = () => {
     const newVal =
-      this.state.dice.length === 0 || this.state.dice[0] == null
+      this.state.dice.length === 0 || this.state.dice[0].value == null
         ? null
         : randint(1, 6);
     this.setState({
-      dice: this.state.dice.concat([newVal])
+      dice: this.state.dice.concat([makeDie(newVal)])
     });
   };
-  _removeDie = () => {
+
+  _onRemoveDie = () => this._removeDie(this.state.dice.length - 1);
+
+  _canRemove() {
+    return this.state.dice.length > this.props.minDice;
+  }
+
+  _removeDie = idx => {
+    if (!this._canRemove()) {
+      return;
+    }
     this.setState({
-      dice: this.state.dice.slice(0, -1)
+      dice: this.state.dice.slice(0, idx).concat(this.state.dice.slice(idx + 1))
     });
   };
+
   render() {
     return (
       <div className="container">
         <div className="controls">
-          <button
-            disabled={this.state.dice.length === this.props.minDice}
-            onClick={this._removeDie}
-          >
+          <button disabled={!this._canRemove()} onClick={this._onRemoveDie}>
             -
           </button>
           <button onClick={this._rollDice}>Roll</button>
@@ -78,7 +89,12 @@ class App extends React.Component {
             +
           </button>
         </div>
-        <DiceTable rollID={this.state.rollID} values={this.state.dice} />
+        <DiceTable
+          rollID={this.state.rollID}
+          values={this.state.dice}
+          canRemove={this._canRemove()}
+          onRemoveDie={this._removeDie}
+        />
       </div>
     );
   }

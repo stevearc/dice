@@ -30,7 +30,10 @@ module.exports = {
         loader: "babel-loader",
         query: {
           presets: ["env", "react"],
-          plugins: [require("babel-plugin-transform-class-properties")]
+          plugins: [
+            require("babel-plugin-transform-class-properties"),
+            require("babel-plugin-transform-object-rest-spread")
+          ]
         }
       },
       {
