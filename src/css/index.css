@@ -1,0 +1,41 @@
+html,
+body,
+#react-app {
+  height: 100%;
+  margin: 0;
+  width: 100%;
+}
+button:hover {
+  cursor: pointer;
+}
+button[disabled] {
+  cursor: not-allowed;
+}
+
+.container {
+  align-items: center;
+  background-color: #0c5338;
+  background-image: url("../img/felt.png");
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.controls {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  justify-content: center;
+  margin-bottom: 20px;
+  max-width: 600px;
+  width: 100%;
+}
+.controls button {
+  flex-grow: 1;
+  font-family: sans-serif;
+  font-size: 50px;
+  padding: 10px;
+}

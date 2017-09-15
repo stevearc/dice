@@ -1,0 +1,108 @@
+:root {
+  --die-size: 60px;
+  --dot-size: calc(var(--die-size) / 4);
+  --dot-margin: calc(var(--dot-size) / 6);
+  --side-translate: calc(var(--die-size) / 2);
+  --side-translate-inner: calc(var(--die-size) / 2 - 2px);
+}
+/* iPhone SE/5 */
+@media (min-width: 320px) and (orientation: portrait),
+  (min-height: 320px) and (orientation: landscape) {
+  :root {
+    --die-size: 80px;
+  }
+}
+/* iPhone 8/X */
+@media (min-width: 375px) and (orientation: portrait),
+  (min-height: 375px) and (orientation: landscape) {
+  :root {
+    --die-size: 100px;
+  }
+}
+/* iPhone 8 Plus */
+@media (min-width: 414px) and (orientation: portrait),
+  (min-height: 414px) and (orientation: landscape) {
+  :root {
+    --die-size: 120px;
+  }
+}
+/* iPad mini/air */
+@media (min-width: 768px) and (orientation: portrait),
+  (min-height: 768px) and (orientation: landscape) {
+  :root {
+    --die-size: 150px;
+  }
+}
+/* iPad pro */
+@media (min-width: 834px) and (orientation: portrait),
+  (min-height: 834px) and (orientation: landscape) {
+  :root {
+    --die-size: 200px;
+  }
+}
+
+/* Make it a little fancier for non-iOS devices (that support vw) */
+@media (max-width: 800px) {
+  :root {
+    --die-size: 20vw;
+  }
+}
+
+.dice {
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  flex-grow: 1;
+  justify-content: space-around;
+}
+
+.die {
+  height: var(--die-size);
+  margin: var(--dot-size);
+  transform-style: preserve-3d;
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  transition: transform .1s ease;
+  width: var(--die-size);
+}
+.side {
+  align-items: center;
+  backface-visibility: hidden;
+  background: #fff;
+  box-shadow: inset 0 0 calc(var(--die-size) / 5) #ccc;
+  display: flex;
+  flex-flow: row wrap;
+  height: var(--die-size);
+  justify-content: space-around;
+  padding: 2px;
+  position: absolute;
+  width: var(--die-size);
+}
+.side:nth-child(1) {
+  transform: translateZ(var(--side-translate));
+}
+.side:nth-child(2) {
+  transform: rotateX(-180deg) translateZ(var(--side-translate));
+}
+.side:nth-child(3) {
+  transform: rotateY(90deg) translateZ(var(--side-translate));
+}
+.side:nth-child(4) {
+  transform: rotateY(-90deg) translateZ(var(--side-translate));
+}
+.side:nth-child(5) {
+  transform: rotateX(90deg) translateZ(var(--side-translate));
+}
+.side:nth-child(6) {
+  transform: rotateX(-90deg) translateZ(var(--side-translate));
+}
+.dot {
+  background: #444;
+  border-radius: calc(var(--dot-size) / 2);
+  box-shadow: inset calc(var(--dot-size)/8) 0 calc(var(--dot-size) / 4) #000;
+  height: var(--dot-size);
+  margin: var(--dot-margin);
+  width: var(--dot-size);
+}
+.dot.hidden {
+  visibility: hidden;
+}
