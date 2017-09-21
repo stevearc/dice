@@ -25,6 +25,10 @@ module.exports = {
   module: {
     loaders: [
       {
+        test: require.resolve("ua-parser-js"),
+        use: "script-loader"
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: "babel-loader",

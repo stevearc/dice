@@ -5,6 +5,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import _ from "ua-parser-js";
 import classnames from "classnames";
 
 import "./css/die.css";
@@ -34,12 +35,12 @@ const FACE_MAP = [
 ]
 const FACE_TRANSFORM = [
   null,
-  "rotateX(0deg) rotateY(0deg) rotateZ(0deg)",
-  "rotateX(-90deg) rotateY(0deg) rotateZ(0deg)",
-  "rotateX(0deg) rotateY(-90deg) rotateZ(0deg)",
-  "rotateX(0deg) rotateY(90deg) rotateZ(0deg)",
-  "rotateX(90deg) rotateY(0deg) rotateZ(0deg)",
-  "rotateX(180deg) rotateY(0deg) rotateZ(0deg)"
+  "rotateX(0deg) rotateY(0deg) rotateZ(0deg)", // 1
+  "rotateX(-90deg) rotateY(0deg) rotateZ(0deg)", // 2
+  "rotateX(0deg) rotateY(-90deg) rotateZ(0deg)", // 3
+  "rotateX(0deg) rotateY(90deg) rotateZ(0deg)", // 4
+  "rotateX(90deg) rotateY(0deg) rotateZ(0deg)", // 5
+  "rotateX(180deg) rotateY(0deg) rotateZ(0deg)" // 6
 ];
 
 function Face({ className, pips }) {
@@ -51,6 +52,10 @@ function Face({ className, pips }) {
     </div>
   );
 }
+
+const parser = new UAParser();
+const parseResult = parser.getResult();
+const os = parseResult.os.name;
 
 export default class Die extends React.Component {
   _demoOffset = -4 * Math.random();
@@ -81,9 +86,11 @@ export default class Die extends React.Component {
     this.setState({ rolling: false });
   };
   render() {
+    // iOS bugs out when using a negative animation delay here
+    const rollOffset = os === "iOS" ? "" : `-${this.props.rollOffset}s`;
     const style = {
       animation: this.state.rolling
-        ? `roll 1s linear -${this.props.rollOffset}s`
+        ? `roll 1s linear ${rollOffset}`
         : this.props.value == null
           ? `demo 5s linear ${this._demoOffset}s infinite`
           : null,
